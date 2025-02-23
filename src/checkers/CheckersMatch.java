@@ -5,6 +5,8 @@ import java.util.List;
 
 import boardgame.Board;
 import boardgame.Piece;
+import checkers.piece.PieceBlack;
+import checkers.piece.PieceWhite;
 
 public class CheckersMatch {
 
@@ -56,7 +58,7 @@ public class CheckersMatch {
     }
 
     private void initialSetup() {
-        placeNewPiece(1, 1, new CheckersPiece(board, Color.WHITE));
-        placeNewPiece(2, 7, new CheckersPiece(board, Color.BLACK));
+        placeNewPiece(1, 1, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(2, 7, new PieceBlack(board, Color.BLACK));
     }
 }

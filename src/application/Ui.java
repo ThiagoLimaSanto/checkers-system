@@ -5,6 +5,8 @@ import checkers.Color;
 
 public class Ui {
 
+    private static Integer aux = 0;
+
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -16,6 +18,7 @@ public class Ui {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+    public static final String ANSI_GRAY_BACKGROUND = "\033[100m";
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
     public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
@@ -32,28 +35,37 @@ public class Ui {
 
     public static void printBoard(CheckersPiece[][] pieces) {
         for (int i = 0; i < pieces.length; i++) {
+            
             System.out.print((8 - i) + " ");
             for (int j = 0; j < pieces.length; j++) {
-                printPiece(pieces[i][j], false);
+                paint();
+                printPiece(pieces[i][j]);
             }
+            aux++;
             System.out.println();
         }
-        System.out.println("  1 2 3 4 5 6 7 8");
+
+        System.out.println("  12345678");
     }
 
-    private static void printPiece(CheckersPiece piece, boolean background) {
-        if (background) {
-            System.out.print(ANSI_BLUE_BACKGROUND);
-        }
+    private static void printPiece(CheckersPiece piece) {
         if (piece == null) {
-            System.out.print("-" + ANSI_RESET);
+            System.out.print(" " + ANSI_RESET);
         } else {
             if (piece.getColor() == Color.WHITE) {
-                System.out.print(ANSI_WHITE + piece + ANSI_RESET);
+                System.out.print(ANSI_CYAN + piece + ANSI_RESET);
             } else {
                 System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
             }
         }
-        System.out.print(" ");
+    }   
+
+    private static void paint(){
+        if (aux % 2 == 0) {
+            System.out.print(ANSI_BLACK_BACKGROUND);
+        }else{
+            System.out.print(ANSI_WHITE_BACKGROUND);
+        }
+        aux++;
     }
 }
