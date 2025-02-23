@@ -5,13 +5,14 @@ import java.util.List;
 
 import boardgame.Board;
 import boardgame.Piece;
+import boardgame.Position;
 import checkers.piece.PieceBlack;
 import checkers.piece.PieceWhite;
 
 public class CheckersMatch {
 
-    private List<Piece> piecesWhite = new ArrayList<>();
-    private List<Piece> piecesBlack = new ArrayList<>();
+    private List<CheckersPiece> piecesWhite = new ArrayList<>();
+    private List<CheckersPiece> piecesBlack = new ArrayList<>();
 
     private boolean endgame;
     private Integer turn;
@@ -48,6 +49,58 @@ public class CheckersMatch {
         return mat;
     }
 
+    public boolean[][] possibleMoves(CheckersPosition sourcePosition) {
+        Position position = sourcePosition.toPosition();
+        validateSourcePosition(position);
+        return board.piece(position).possibleMove();
+    }
+
+    public CheckersPiece performChessMovie(CheckersPosition sourcePosition, CheckersPosition targetPostion) {
+        Position source = sourcePosition.toPosition();
+        Position target = targetPostion.toPosition();
+        validateSourcePosition(source);
+        validateTargetPosition(source, target);
+        Piece capturedPiece = makeMove(source, target);
+        nextTurn();
+        return (CheckersPiece) capturedPiece;
+    }
+
+    private void validateTargetPosition(Position source, Position target) {
+        if (!board.piece(source).possibleMove(target)) {
+            throw new CheckersException("The chosen piece can't move to target position");
+        }
+    }
+
+    private Piece makeMove(Position source, Position target) {
+        CheckersPiece p = (CheckersPiece) board.removePiece(source);
+        CheckersPiece capturedPiece = (CheckersPiece) board.removePiece(target);
+        board.placePiece(p, target);
+
+        if (capturedPiece != null && capturedPiece.getColor() == Color.WHITE) {
+            piecesWhite.remove(capturedPiece);
+        }else if (capturedPiece != null && capturedPiece.getColor() == Color.BLACK) {
+            piecesBlack.remove(capturedPiece);
+        }
+        return capturedPiece;
+    }
+
+    private void validateSourcePosition(Position position) {
+        if (!board.thereIsAPiece(position)) {
+            throw new CheckersException("There is no piece on source position");
+        }
+        if (currentPlayer != ((CheckersPiece) board.piece(position)).getColor()) {
+            throw new CheckersException("The chosen piece is not yours");
+        }
+        if (!board.piece(position).isThereAnyPossibleMove()) {
+            throw new CheckersException("There is no possible moves for the chosen piece");
+        }
+    }
+
+    private void nextTurn() {
+        turn++;
+        currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+    }
+
     private void placeNewPiece(Integer column, Integer row, CheckersPiece piece) {
         board.placePiece(piece, new CheckersPosition(column, row).toPosition());
         if (piece.getColor() == Color.WHITE) {
@@ -70,7 +123,6 @@ public class CheckersMatch {
         placeNewPiece(4, 3, new PieceWhite(board, Color.WHITE));
         placeNewPiece(6, 3, new PieceWhite(board, Color.WHITE));
         placeNewPiece(8, 3, new PieceWhite(board, Color.WHITE));
-
 
         placeNewPiece(1, 8, new PieceBlack(board, Color.BLACK));
         placeNewPiece(3, 8, new PieceBlack(board, Color.BLACK));

@@ -9,7 +9,7 @@ public class CheckersPosition {
 
     public CheckersPosition(Integer column, Integer row) {
         if (column < 1 || column > 8 || row < 1 || row > 8) {
-            throw new CheckersException("Error instantiating chessPosition. Valid values are from a1 to h8");
+            throw new CheckersException("Error instantiating chessPosition. Valid values are from 11 to 88");
         }
         this.column = column;
         this.row = row;
@@ -30,5 +30,9 @@ public class CheckersPosition {
     @Override
     public String toString() {
         return column + ", " + row;
+    }
+
+    protected static CheckersPosition fromPosition(Position position){
+        return new CheckersPosition((1 + position.getColumn()), 8 -  position.getRow());
     }
 }

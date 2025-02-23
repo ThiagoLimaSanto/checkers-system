@@ -1,6 +1,14 @@
 package application;
 
+import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+import checkers.CheckersMatch;
 import checkers.CheckersPiece;
+import checkers.CheckersPosition;
 import checkers.Color;
 
 public class Ui {
@@ -33,22 +41,56 @@ public class Ui {
         System.out.flush();
     }
 
+    public static CheckersPosition readChessPosition(Scanner scan) {
+        try {
+            String[] s = scan.nextLine().split("");
+            Integer column = Integer.parseInt(s[0]);
+            Integer row = Integer.parseInt(s[1]);
+
+            return new CheckersPosition(column, row);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void printMatch(CheckersMatch chessMatch, List<CheckersPiece> captured) {
+        printBoard(chessMatch.getPieces());
+        System.out.println();
+        printCapturedPieces(captured);
+        System.out.println();
+        System.out.println("Turn " + chessMatch.getTurn());
+        System.out.println("Waiting player " + chessMatch.getCurrentPlayer());
+    }
+
     public static void printBoard(CheckersPiece[][] pieces) {
         for (int i = 0; i < pieces.length; i++) {
-            
             System.out.print((8 - i) + " ");
             for (int j = 0; j < pieces.length; j++) {
                 paint();
-                printPiece(pieces[i][j]);
+                printPiece(pieces[i][j], false);
             }
             aux++;
             System.out.println();
         }
-
         System.out.println("  12345678");
     }
 
-    private static void printPiece(CheckersPiece piece) {
+    public static void printBoard(CheckersPiece[][] pieces, boolean[][] possibleMoves) {
+        for (int i = 0; i < pieces.length; i++) {
+            System.out.print((8 - i) + " ");
+            for (int j = 0; j < pieces.length; j++) {
+                printPiece(pieces[i][j], possibleMoves[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println("  12345678");
+    }
+
+    private static void printPiece(CheckersPiece piece, boolean background) {
+        if (background) {
+            System.out.print(ANSI_BLUE_BACKGROUND);
+        }
         if (piece == null) {
             System.out.print(" " + ANSI_RESET);
         } else {
@@ -58,12 +100,30 @@ public class Ui {
                 System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
             }
         }
-    }   
+    }
 
-    private static void paint(){
+    private static void printCapturedPieces(List<CheckersPiece> captured) {
+        List<CheckersPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE)
+                .collect(Collectors.toList());
+
+        List<CheckersPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK)
+                .collect(Collectors.toList());
+
+        System.out.println("Captured pieces: ");
+        System.out.print("White: ");
+        System.out.print(ANSI_WHITE);
+        System.out.print(Arrays.toString(white.toArray()));
+        System.out.println(ANSI_RESET);
+        System.out.print("Black: ");
+        System.out.print(ANSI_YELLOW);
+        System.out.print(Arrays.toString(black.toArray()));
+        System.out.println(ANSI_RESET);
+    }
+
+    private static void paint() {
         if (aux % 2 == 0) {
             System.out.print(ANSI_BLACK_BACKGROUND);
-        }else{
+        } else {
             System.out.print(ANSI_WHITE_BACKGROUND);
         }
         aux++;
