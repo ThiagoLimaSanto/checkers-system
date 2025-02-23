@@ -58,7 +58,31 @@ public class CheckersMatch {
     }
 
     private void initialSetup() {
-        placeNewPiece(1, 1, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(2, 1, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(4, 1, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(6, 1, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(8, 1, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(1, 2, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(3, 2, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(5, 2, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(7, 2, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(2, 3, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(4, 3, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(6, 3, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(8, 3, new PieceWhite(board, Color.WHITE));
+
+
+        placeNewPiece(1, 8, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(3, 8, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(5, 8, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(7, 8, new PieceBlack(board, Color.BLACK));
         placeNewPiece(2, 7, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(4, 7, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(6, 7, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(8, 7, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(1, 6, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(3, 6, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(5, 6, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(7, 6, new PieceBlack(board, Color.BLACK));
     }
 }

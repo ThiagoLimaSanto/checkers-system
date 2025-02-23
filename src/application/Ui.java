@@ -53,7 +53,7 @@ public class Ui {
             System.out.print(" " + ANSI_RESET);
         } else {
             if (piece.getColor() == Color.WHITE) {
-                System.out.print(ANSI_CYAN + piece + ANSI_RESET);
+                System.out.print(ANSI_WHITE + piece + ANSI_RESET);
             } else {
                 System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
             }
