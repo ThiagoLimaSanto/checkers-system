@@ -27,7 +27,7 @@ public class CheckersMatch {
         initialSetup();
     }
 
-    public boolean isEndgame() {
+    public boolean getEndgame() {
         return endgame;
     }
 
@@ -61,7 +61,11 @@ public class CheckersMatch {
         validateSourcePosition(source);
         validateTargetPosition(source, target);
         Piece capturedPiece = makeMove(source, target);
-        nextTurn();
+        if (isEndgame()) {
+            endgame = true;
+        }else{
+            nextTurn();
+        }
         return (CheckersPiece) capturedPiece;
     }
 
@@ -94,6 +98,13 @@ public class CheckersMatch {
         if (!board.piece(position).isThereAnyPossibleMove()) {
             throw new CheckersException("There is no possible moves for the chosen piece");
         }
+    }
+
+    private boolean isEndgame(){
+        if (piecesBlack.isEmpty() || piecesWhite.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     private void nextTurn() {

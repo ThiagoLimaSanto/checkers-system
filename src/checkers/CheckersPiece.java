@@ -32,7 +32,7 @@ public abstract class CheckersPiece extends Piece {
         Position p = new Position(0, 0);
 
         p.setValues(position.getRow() - 1, position.getColumn() - 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
+        if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
             mat[p.getRow()][p.getColumn()] = true;
             p.setRow(p.getRow() - 1);
             p.setColumn(p.getColumn() - 1);
@@ -42,7 +42,7 @@ public abstract class CheckersPiece extends Piece {
         }
 
         p.setValues(position.getRow() - 1, position.getColumn() + 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
+        if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
             mat[p.getRow()][p.getColumn()] = true;
             p.setColumn(p.getColumn() + 1);
             p.setRow(p.getRow() - 1);
@@ -52,7 +52,7 @@ public abstract class CheckersPiece extends Piece {
         }
 
         p.setValues(position.getRow() + 1, position.getColumn() - 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
+        if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
             mat[p.getRow()][p.getColumn()] = true;
             p.setColumn(p.getColumn() - 1);
             p.setRow(p.getRow() + 1);
@@ -62,7 +62,7 @@ public abstract class CheckersPiece extends Piece {
         }
 
         p.setValues(position.getRow() + 1, position.getColumn() + 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
+        if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
             mat[p.getRow()][p.getColumn()] = true;
             p.setRow(p.getRow() + 1);
             p.setColumn(p.getColumn() + 1);

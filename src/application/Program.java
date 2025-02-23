@@ -16,7 +16,7 @@ public class Program {
         CheckersMatch chessMatch = new CheckersMatch();
         List<CheckersPiece> captured = new ArrayList<>();
 
-        while (!chessMatch.isEndgame()) {
+        while (!chessMatch.getEndgame()) {
             try {
                 Ui.clearScreen();
                 Ui.printMatch(chessMatch, captured);
@@ -49,5 +49,7 @@ public class Program {
                 scan.nextLine();
             }
         }
+        Ui.clearScreen();
+        Ui.printMatch(chessMatch, captured);
     }
 }
