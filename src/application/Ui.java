@@ -1,7 +1,6 @@
 package application;
 
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -80,8 +79,10 @@ public class Ui {
         for (int i = 0; i < pieces.length; i++) {
             System.out.print((8 - i) + " ");
             for (int j = 0; j < pieces.length; j++) {
+                paint();
                 printPiece(pieces[i][j], possibleMoves[i][j]);
             }
+            aux++;
             System.out.println();
         }
         System.out.println("  12345678");

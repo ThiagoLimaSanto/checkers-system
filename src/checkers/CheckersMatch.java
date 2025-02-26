@@ -2,6 +2,7 @@ package checkers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -11,8 +12,8 @@ import checkers.piece.PieceWhite;
 
 public class CheckersMatch {
 
-    private List<CheckersPiece> piecesWhite = new ArrayList<>();
-    private List<CheckersPiece> piecesBlack = new ArrayList<>();
+    private List<CheckersPiece> piecesOnTheBoard = new ArrayList<>();
+    private List<Piece> capturedPieces = new ArrayList<>();
 
     private boolean endgame;
     private Integer turn;
@@ -61,9 +62,9 @@ public class CheckersMatch {
         validateSourcePosition(source);
         validateTargetPosition(source, target);
         Piece capturedPiece = makeMove(source, target);
-        if (isEndgame()) {
+        if (isEndgame(currentPlayer)) {
             endgame = true;
-        }else{
+        } else {
             nextTurn();
         }
         return (CheckersPiece) capturedPiece;
@@ -77,13 +78,13 @@ public class CheckersMatch {
 
     private Piece makeMove(Position source, Position target) {
         CheckersPiece p = (CheckersPiece) board.removePiece(source);
-        CheckersPiece capturedPiece = (CheckersPiece) board.removePiece(target);
+        CheckersPiece capturedPiece = (CheckersPiece) board
+                .removePiece((target.getRow() + source.getRow()) / 2,
+                        (target.getColumn() + source.getColumn()) / 2);
         board.placePiece(p, target);
-
-        if (capturedPiece != null && capturedPiece.getColor() == Color.WHITE) {
-            piecesWhite.remove(capturedPiece);
-        }else if (capturedPiece != null && capturedPiece.getColor() == Color.BLACK) {
-            piecesBlack.remove(capturedPiece);
+        if (capturedPiece != null) {
+            piecesOnTheBoard.remove(capturedPiece);
+            capturedPieces.add(capturedPiece);
         }
         return capturedPiece;
     }
@@ -100,8 +101,10 @@ public class CheckersMatch {
         }
     }
 
-    private boolean isEndgame(){
-        if (piecesBlack.isEmpty() || piecesWhite.isEmpty()) {
+    private boolean isEndgame(Color color) {
+        List<CheckersPiece> list = piecesOnTheBoard.parallelStream().filter(x -> x.getColor() == opponent(color))
+                .collect(Collectors.toList());
+        if (list.isEmpty()) {
             return true;
         }
         return false;
@@ -112,13 +115,13 @@ public class CheckersMatch {
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 
+    private Color opponent(Color color) {
+        return (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+    }
+
     private void placeNewPiece(Integer column, Integer row, CheckersPiece piece) {
         board.placePiece(piece, new CheckersPosition(column, row).toPosition());
-        if (piece.getColor() == Color.WHITE) {
-            piecesWhite.add(piece);
-        } else {
-            piecesBlack.add(piece);
-        }
+        piecesOnTheBoard.add(piece);
     }
 
     private void initialSetup() {
