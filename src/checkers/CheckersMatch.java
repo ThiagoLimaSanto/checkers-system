@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
-import checkers.piece.PieceBlack;
+import checkers.piece.Checker;
 import checkers.piece.PieceWhite;
 
 public class CheckersMatch {
@@ -77,16 +77,25 @@ public class CheckersMatch {
     }
 
     private Piece makeMove(Position source, Position target) {
+        Piece capturedPiece;
         CheckersPiece p = (CheckersPiece) board.removePiece(source);
-        CheckersPiece capturedPiece = (CheckersPiece) board
-                .removePiece((target.getRow() + source.getRow()) / 2,
-                        (target.getColumn() + source.getColumn()) / 2);
         board.placePiece(p, target);
-        if (capturedPiece != null) {
-            piecesOnTheBoard.remove(capturedPiece);
-            capturedPieces.add(capturedPiece);
+        int deltaX = (target.getRow() > source.getRow()) ? 1 : -1;
+        int deltaY = (target.getColumn()) > source.getColumn() ? 1 : -1;
+        int x = source.getRow() + deltaX;
+        int y = source.getColumn() + deltaY;
+        while (x != target.getRow() && y != target.getColumn()) {
+            capturedPiece = board.piece(x, y);
+            if (capturedPiece != null) {
+                Piece aux = board.removePiece(new Position(x, y));
+                piecesOnTheBoard.remove(aux);
+                capturedPieces.add(aux);
+                return aux;
+            }
+            x += deltaX;
+            y += deltaY;
         }
-        return capturedPiece;
+        return null;
     }
 
     private void validateSourcePosition(Position position) {
@@ -125,30 +134,8 @@ public class CheckersMatch {
     }
 
     private void initialSetup() {
-        placeNewPiece(2, 1, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(4, 1, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(6, 1, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(8, 1, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(1, 2, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(3, 2, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(5, 2, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(7, 2, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(2, 3, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(3, 4, new Checker(board, Color.WHITE));
         placeNewPiece(4, 3, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(6, 3, new PieceWhite(board, Color.WHITE));
-        placeNewPiece(8, 3, new PieceWhite(board, Color.WHITE));
-
-        placeNewPiece(1, 8, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(3, 8, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(5, 8, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(7, 8, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(2, 7, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(4, 7, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(6, 7, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(8, 7, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(1, 6, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(3, 6, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(5, 6, new PieceBlack(board, Color.BLACK));
-        placeNewPiece(7, 6, new PieceBlack(board, Color.BLACK));
+        placeNewPiece(5, 4, new Checker(board, Color.BLACK));
     }
 }
