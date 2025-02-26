@@ -8,6 +8,7 @@ import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
 import checkers.piece.Checker;
+import checkers.piece.PieceBlack;
 import checkers.piece.PieceWhite;
 
 public class CheckersMatch {
@@ -79,7 +80,12 @@ public class CheckersMatch {
     private Piece makeMove(Position source, Position target) {
         Piece capturedPiece;
         CheckersPiece p = (CheckersPiece) board.removePiece(source);
-        board.placePiece(p, target);
+        if (target.getRow() == 0 || target.getRow() == 7) {
+            board.placePiece(checker(), target);
+        } else {
+            board.placePiece(p, target);
+        }
+
         int deltaX = (target.getRow() > source.getRow()) ? 1 : -1;
         int deltaY = (target.getColumn()) > source.getColumn() ? 1 : -1;
         int x = source.getRow() + deltaX;
@@ -110,6 +116,10 @@ public class CheckersMatch {
         }
     }
 
+    private Checker checker() {
+        return new Checker(board, currentPlayer);
+    }
+
     private boolean isEndgame(Color color) {
         List<CheckersPiece> list = piecesOnTheBoard.parallelStream().filter(x -> x.getColor() == opponent(color))
                 .collect(Collectors.toList());
@@ -135,6 +145,8 @@ public class CheckersMatch {
 
     private void initialSetup() {
         placeNewPiece(3, 4, new Checker(board, Color.WHITE));
+        placeNewPiece(4, 7, new PieceWhite(board, Color.WHITE));
+        placeNewPiece(3, 2, new PieceBlack(board, Color.BLACK));
         placeNewPiece(4, 3, new PieceWhite(board, Color.WHITE));
         placeNewPiece(5, 4, new Checker(board, Color.BLACK));
     }
